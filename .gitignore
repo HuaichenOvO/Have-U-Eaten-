@@ -1,2 +1,11 @@
 /venv/
 /be/
+/static/
+/backend/accounts/migrations
+
+*.html
+*.css
+*.js
+*.pyc
+*.sqlite3
+Super User Info.txt

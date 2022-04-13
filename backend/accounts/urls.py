@@ -14,13 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-# 路由系统，和views文件一同进行网页的提供和渲染
+# the url.py in APP
 
-from django.contrib import admin
 from django.urls import path, include
-
+from accounts import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('accounts.urls')) # ''里千万不能加斜杠！！！不然会炸裂
+    path('', views.home),
+    path('contact/', views.contact, name= "myCon"),
+    path('customer/', views.customer, name= "myCon"),
+    path('products/', views.products, name= "myPro"),
 ]
