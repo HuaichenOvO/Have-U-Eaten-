@@ -19,18 +19,11 @@ class Client(models.Model):
     email = models.EmailField(max_length=200, null=True)
     phone = models.CharField(max_length=200, null=True)
     coin_num = models.IntegerField(default=0)
+    tasks_delivered = models.IntegerField(default=0)
+    # orders = models.ManyToManyField(Order) # 如果一个用户对应的多个xx，可以使用manytomanyField
 
     def __str__(self):
         return self.name
-
-class Order(models.Model):
-    ID_buyer = models.CharField(max_length=200, null=True)
-    ID_sender = models.CharField(max_length=200, null=True)
-    take_addr = models.CharField(max_length=200, null=True)
-    send_addr = models.CharField(max_length=200, null=True)
-    exp_time = models.DateTimeField(auto_now_add=True, null=True)
-    coin_reward = models.IntegerField(max_length=200, null=True)
-    food_info = models.ImageField(null=True)
 
 class Address(models.Model):
     AREA = (
@@ -43,6 +36,27 @@ class Address(models.Model):
         ('Others','Others'),
     )
 
-    area = models.CharField(max_length=200, null=True, choices=AREA)
+    area = models.CharField(max_length=200, null=True, choices=AREA) #choices相当于一个枚举
     building = models.CharField(max_length=50, null=True)
-    number = models.IntegerField(max_length=200, null=True)
+    number = models.IntegerField(null=True)
+
+    def __str__(self):
+        return self.area + " " + self.building + str(self.number)
+
+class Order(models.Model):
+    buyer = models.ForeignKey(Client, related_name="as_buyer", null=True, on_delete=models.SET_NULL)
+    sender = models.ForeignKey(Client, related_name="as_sender", null=True, on_delete=models.SET_NULL)
+    take_addr = models.ForeignKey(Address, related_name="take_food_from",  null=True,on_delete=models.SET_NULL)
+    send_addr = models.ForeignKey(Address, related_name="send_food_to", null=True, on_delete=models.SET_NULL)
+    exp_time = models.DateTimeField(auto_now_add=True, null=True)
+    coin_reward = models.IntegerField(null=True)
+    food_info = models.ImageField(null=True)
+
+    def __str__(self):
+        return self.sender.name + " take for " + self.buyer.name + "-" + str(self.pk)
+
+# class Foo(models.Model):
+#     cli = models.ForeignKey(Client, null=True, on_delete=models.SET_NULL, related_name="gods")
+#     point = models.IntegerField(null=True)
+# # 获取指向某个client的所有foo： 1. clients=Client.objects.all();  for cli in clients: foos = cli.gods.all()
+# # 2. 1. client1=Client.objects.get(id=10086); foos = client1.gods.all()

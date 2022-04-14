@@ -21,7 +21,7 @@ from accounts import views
 
 urlpatterns = [
     path('', views.home),
-    path('contact/', views.contact, name= "myCon"),
-    path('customer/', views.customer, name= "myCon"),
-    path('products/', views.products, name= "myPro"),
+    path('contact/', views.contact, name= "Contact"),
+    path('customer/', views.customer, name= "Customer"),
+    path('products/', views.products, name= "Products"),
 ]

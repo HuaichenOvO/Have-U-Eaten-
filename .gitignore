@@ -3,6 +3,9 @@
 /static/
 /backend/accounts/migrations
 
+*.png 
+*.img 
+*.jpg
 *.html
 *.css
 *.js
