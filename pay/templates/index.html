@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+     <style>
+  table,table tr th, table tr td { border:1px solid #0094ff; }
+        table { width:300px; min-height: 25px; line-height: 25px; text-align: center; border-collapse: collapse; padding:2px;}   
+        a{
+            text-decoration: none;
+        }
+</style>
+</head>
+<body>
+    <h1>充值中心</h1>
+    <table border="1">
+    <thead>商品目录</thead>
+    <tr>
+        <td>商品名</td>
+        <td>商品单价</td>
+        <td>商品数量</td>
+        <td>是否购买</td>
+    </tr>
+    <tr>
+        <td>Bittencoin</td>
+        <td>0.1</td>
+        <td>1</td>
+        <td><a href="{% url 'dingdan' %}">购买</a></td>
+    </table>
+</body>
+</html>
