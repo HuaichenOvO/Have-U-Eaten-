@@ -20,10 +20,7 @@ from django.urls import path, include
 from accounts import views
 
 urlpatterns = [
-    path('', views.home),
-    path('contact/', views.contact, name= "Contact"),
-    path('customer/<str:pk_test>', views.customer, name= "Customer"),
-    path('products/', views.products, name= "Products"),
+    path('', views.profile),
 
     # user stuffs
     path('register/', views.registerPage, name="Register"),

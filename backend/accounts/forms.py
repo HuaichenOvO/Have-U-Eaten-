@@ -13,7 +13,7 @@ class TaskCreateForm(ModelForm):
 class AddressCreateForm(ModelForm):
     class Meta:
         model = Address
-        fields = "__all__"    
+        exclude = ["owner"]
 
 class CreateUserForm(UserCreationForm):
 	class Meta:
