@@ -61,7 +61,10 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         # DIRS： 用于让系统识别新加入的APP中存放的html文件
-        'DIRS': ['accounts/templates'], 
+        'DIRS': [
+            'accounts/templates'
+            'static'    
+        ], 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -124,9 +127,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATICFILES_DIR = [
+STATICFILES_DIR = (
     os.path.join(BASE_DIR, 'static'),
-]
+)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

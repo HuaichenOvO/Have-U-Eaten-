@@ -1,5 +1,8 @@
 /venv/
-/be/
+/pay/
+/CRM13/
+/CRM14/
+/CRM15/
 /static/
 /backend/accounts/migrations
 

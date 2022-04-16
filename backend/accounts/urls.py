@@ -22,6 +22,29 @@ from accounts import views
 urlpatterns = [
     path('', views.home),
     path('contact/', views.contact, name= "Contact"),
-    path('customer/', views.customer, name= "Customer"),
+    path('customer/<str:pk_test>', views.customer, name= "Customer"),
     path('products/', views.products, name= "Products"),
+
+    # user stuffs
+    path('register/', views.registerPage, name="Register"),
+	path('login/', views.loginPage, name="Login"),  
+	path('logout/', views.logoutUser, name="Logout"),
+
+    # real net part:
+    path('profile/', views.profile, name= "Profile"),
+
+    path('tasks/', views.tasks, name= "Tasks"),
+    path('tasks_create/<str:pk>', views.tasks_create, name= "Tasks_create"),
+    
+    path('delivery/', views.delivery, name= "Delivery"),
+    
+    path('order/', views.order, name= "Order"),
+    
+    path('notice/', views.notice, name= "Notice"),
+    
+    path('message/', views.message, name= "Message"),
+    
+    path('address/', views.address, name= "Address"),
+    path('address_create/', views.address_create, name= "Address_create"),
+
 ]
