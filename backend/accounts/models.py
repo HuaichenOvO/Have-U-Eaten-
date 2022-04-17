@@ -1,5 +1,4 @@
 from django.db import models
-from django.forms import CharField
 from django.contrib.auth.models import User
 
 
@@ -12,6 +11,22 @@ from django.contrib.auth.models import User
 6. 通知| Notice     | 收信者、标题、内容、已读
 """
 
+"""
+Need to rewrite the User form
+"""
+
+# class User(User):
+
+#     def __str__(self):
+#         return self.username
+
+class Token(models.Model):
+    uname = models.CharField(max_length=100)
+    email = models.EmailField()
+    pwd_1 = models.CharField(max_length=100)
+    token = models.CharField(max_length=100)
+
+
 class Client(models.Model):
 
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
@@ -20,7 +35,8 @@ class Client(models.Model):
     coin_num = models.IntegerField(default=2)
     tasks_delivered = models.IntegerField(default=0)
     join_date = models.DateTimeField(auto_created=True, auto_now_add=True, null=True)
-    photo = models.ImageField(null=True, blank=True, default="/static/img/ohh.png")
+    photo = models.ImageField(null=True, blank=True, default="ohh.png")
+    # models, forms, views, html, settings
     # orders = models.ManyToManyField(Order) # 如果一个用户对应的多个xx，可以使用manytomanyField
 
     def __str__(self):
@@ -61,8 +77,9 @@ class Order(models.Model):
     status = models.CharField(max_length=200, default='Pending', choices=STATUS)
     food_info = models.ImageField(null=True, blank=True)
 
-    # def __str__(self):
-    #     return self.buyer.client.nick_name + str(self.id)
+
+    def __str__(self):
+        return self.buyer.client.nick_name + "'s order- " + str(self.id)
 
 class Task(models.Model):
     buyer = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
@@ -74,13 +91,13 @@ class Task(models.Model):
     food_info = models.ImageField(null=True, blank=True)
 
     def __str__(self):
-        return self.buyer.client.nick_name + str(self.id)
+        return self.buyer.client.nick_name + "'s post- " + str(self.id)
 
-class Message(models.Model):
-    sender = models.ForeignKey(User, related_name="as_mes_sender", on_delete=models.CASCADE)
-    receiver = models.ForeignKey(User, related_name="as_mes_receiver", on_delete=models.CASCADE)
-    mes_time = models.DateTimeField(auto_created=True, auto_now_add=True)
-    mes_content = models.TextField(max_length=4000, null=False)
+# class Message(models.Model):
+#     sender = models.ForeignKey(User, related_name="as_mes_sender", on_delete=models.CASCADE)
+#     receiver = models.ForeignKey(User, related_name="as_mes_receiver", on_delete=models.CASCADE)
+#     mes_time = models.DateTimeField(auto_created=True, auto_now_add=True)
+#     mes_content = models.TextField(max_length=4000, null=False)
 
 # class Foo(models.Model):
 #     cli = models.ForeignKey(Client, null=True, on_delete=models.SET_NULL, related_name="gods")

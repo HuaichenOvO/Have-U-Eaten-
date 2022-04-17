@@ -15,20 +15,27 @@ Including another URLconf
 """
 
 # the url.py in APP
-
+from django.contrib import admin
 from django.urls import path, include
 from accounts import views
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
-    path('', views.profile),
+    path('', views.profile, name= "Home"),
 
     # user stuffs
     path('register/', views.registerPage, name="Register"),
 	path('login/', views.loginPage, name="Login"),  
 	path('logout/', views.logoutUser, name="Logout"),
+	path('verify/<str:token>', views.verify),
+	# path('valid_success/', views.logoutUser, name="Logout"),
+	# path('valid_failure/', views.logoutUser, name="Logout"),
 
     # real net part:
     path('profile/', views.profile, name= "Profile"),
+    path('profile_update/', views.profile_update, name= "Profile_update"),
 
     path('tasks/', views.tasks, name= "Tasks"),
     path('tasks_create/<str:pk>', views.tasks_create, name= "Tasks_create"),
@@ -37,11 +44,9 @@ urlpatterns = [
     
     path('order/', views.order, name= "Order"),
     
-    path('notice/', views.notice, name= "Notice"),
-    
-    path('message/', views.message, name= "Message"),
-    
     path('address/', views.address, name= "Address"),
     path('address_create/', views.address_create, name= "Address_create"),
 
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

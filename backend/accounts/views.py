@@ -1,27 +1,23 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from pymysql import NULL
 from .decorators import unauthenticated_user
 from .models import *
 from .views import *
 from .forms import *
 
+from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib import admin
+from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.contrib import messages
-from pymysql import NULL
+import random
 
 
 # Create your views here.
-
-# 存放 functions
-
-@login_required(login_url='Login')
-def home(request):
-    clients = Client.objects.all()
-    addrs = Address.objects.all()
-    context = {"addrs" : addrs, "clients": clients}
-    return render(request, 'accounts/home.html', context)
 
 
 #------------------------ user stuffs ------------------------
@@ -31,25 +27,76 @@ def registerPage(request):
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
-            user = form.save()
 
+            # print(request.POST.get('username'))
+            uname = request.POST.get('username')[0],
+            email = request.POST.get('email')[0],
+            # print("Created: ", email)
+            pwd_1 = request.POST.get('password1')[0],
+            token = str(random.random()).split('.')[1]
+            t = Token(uname=uname, email=email, pwd_1=pwd_1, token=token)
+            t.save()
+
+            # 网页跳转、发送验证短信
+            myDomain = get_current_site(request).domain
+            link = f'http://{myDomain}/verify/{token}'
+
+            send_mail(
+                'CSC4001 Verification',
+                f'Successful registration! Please click the following link to finish the email\
+verification: {link}',
+                settings.EMAIL_HOST_USER,
+                [email],
+                fail_silently=False,
+            )
+
+            return HttpResponse("The message has been sent!")
+
+    context = {'form':form}
+    return render(request, 'real_nets/register.html', context)
+
+@unauthenticated_user
+def verify(request, token):
+    try:
+        token = Token.objects.get(token=token)
+        print(token.uname, token.email)
+    except Exception as ex:
+        messages.error(request, "Validation failed.")
+        return redirect("Register")
+
+    # 注册及激活完成之后的内容
+    if request.method == "POST":
+        try:
+
+            user = User(username = token.uname,
+                email = token.email,
+                password = token.pwd_1,
+            )
+            user.save()
+        except Exception as ex:
+            return HttpResponse(ex)
+
+        try:
             new_client = Client(
                 user = user,
                 phone = NULL
             )
             new_client.save()
-        
+
             group = Group.objects.get(name='Customer')
             user.groups.add(group)
 
-            username = form.cleaned_data.get('username')
+            username = token.uname
             messages.success(request, 'Account was created for ' + username)
 
             return redirect('Login')
+        
+        except Exception as ex:
+            return HttpResponse(ex)
 
+    context = {}
+    return render(request, 'real_nets/valid_success.html', context)
 
-    context = {'form':form}
-    return render(request, 'real_nets/register.html', context)
 
 @unauthenticated_user
 def loginPage(request):
@@ -78,6 +125,25 @@ def profile(request):
     user = request.user
     context = {"usr": user}
     return render(request, 'real_nets/profile.html', context)
+
+@login_required(login_url='Login')
+def profile_update(request):
+    request_client = request.user.client
+    form = ClientUpdateForm(instance=request_client)
+    #调用form中的注册表并渲染进url指定的html文件中
+    if request.method == "POST":
+        # print("On Click1")
+        # 根据 <input name=Submit value=xxx>的value值来确定是哪一个input按钮
+        if request.POST["Submit"] == "confirm": 
+            # print("On Click2")
+            form = ClientUpdateForm(request.POST, request.FILES, instance=request_client)
+            if form.is_valid():
+                print("Confirmed and valid!")
+                form.save()
+                return redirect(profile)
+
+    context = {"form": form}
+    return render(request, 'real_nets/profile_update.html', context)
 
 @login_required(login_url='Login')
 def tasks(request):
@@ -160,18 +226,6 @@ def order(request):
     
     context = {"orders": orders}    
     return render(request, 'real_nets/order.html', context)
-
-@login_required(login_url='Login')
-def notice(request):
-    
-    context = {}    
-    return render(request, 'real_nets/notice.html', context)
-
-@login_required(login_url='Login')
-def message(request):
-    
-    context = {}    
-    return render(request, 'real_nets/message.html', context)
 
 @login_required(login_url='Login')
 def address(request):
