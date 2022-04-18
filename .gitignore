@@ -1,0 +1,16 @@
+/*/
+!/backend/
+/backend/accounts/migrations
+/backend/alipay/migrations
+/backend/alipay/migrations
+/backend/accounts/__pychache__
+/backend/alipay/__pychache__
+/backend/alipay/__pychache__
+
+*.zip
+*.png 
+*.img 
+*.jpg
+*.pyc
+*.sqlite3
+Super User Info.txt
