@@ -84,6 +84,8 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# --------------- Local Database ---------------
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -91,13 +93,14 @@ DATABASES = {
     }
 }
 
+# --------------- Remote Database ---------------
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'demo_1',
-#         'USER': 'Ricky',
-#         'PASSWORD': '12345678',
-#         'HOST': 'database-1.crxfljereyva.ap-east-1.rds.amazonaws.com',
+#         'NAME': 'xxx',
+#         'USER': 'your user name',
+#         'PASSWORD': 'your pwd',
+#         'HOST': 'database-1.xxxx.xxx.rds.amazonaws.com',
 #         'PORT': '5432'
 #     }
 # }
@@ -145,7 +148,6 @@ STATICFILES_DIR = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = '/img/'
 
@@ -157,20 +159,22 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/img')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
 # --------------- Email Settings---------------
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = False
-EMAIL_HOST = 'smtp.qq.com'
-EMAIL_PORT = 25
-EMAIL_HOST_USER = '1007591290@qq.com'
-EMAIL_HOST_PASSWORD = 'ciuwoerrvbjrbcge'
-DEFAULT_FROM_EMAIL = 'default from email'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_USE_TLS = False
+# EMAIL_HOST = 'smtp.qq.com'
+# EMAIL_PORT = 25
+# EMAIL_HOST_USER = 'xxx@qq.com'
+# EMAIL_HOST_PASSWORD = ''
+# DEFAULT_FROM_EMAIL = 'default from email'
 
 
-# --------------- Server Settings---------------
-AWS_ACCESS_KEY_ID = 'AKIATRX2EOI4DAHSMWM7'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'csc4001'
-AWS_DEFAULT_ACL = None
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# # --------------- Server Settings---------------
+# AWS_ACCESS_KEY_ID = ''
+# AWS_SECRET_ACCESS_KEY = ''
+# AWS_STORAGE_BUCKET_NAME = 'csc4001'
+# AWS_DEFAULT_ACL = None
+# DEFAULT_FILE_STORAGE = 'storages.backends..'
+# STATICFILES_STORAGE = 'storages.backends..'
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"

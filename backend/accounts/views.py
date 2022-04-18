@@ -74,10 +74,11 @@ def verify(request, token):
         try:
             uname = myToken.uname[2:-3]
             pwd = myToken.pwd_1[2:-3]
-            user = User(username = uname,
+            # print(uname, pwd)
+            user = User.objects.create_user(username = uname,
                 email = myToken.email,
-                password = pwd,
             )
+            user.set_password(pwd)
             user.save()
         except Exception as ex:
             return HttpResponse(ex)
@@ -92,7 +93,7 @@ def verify(request, token):
             group = Group.objects.get(name='Client')
             user.groups.add(group)
 
-            username = token.uname
+            username = myToken.uname
             messages.success(request, 'Account was created for ' + username)
 
             return redirect('Login')
