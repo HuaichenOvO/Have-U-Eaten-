@@ -1,7 +1,5 @@
 # CSC4001
 For our Team Project
-<<<<<<< Updated upstream
-=======
 
 
 ## environment
@@ -59,8 +57,3 @@ MySU                MySU_pwd_123
 ### 3. remote server conf
 we did not provide these due to the consideration of privacy, 
 we will demo it on the presentation
-
-## what we haven't really achieve due to some 审核:
-### alipay API
-It can be used in the test-version alipay, instead of the real one
->>>>>>> Stashed changes

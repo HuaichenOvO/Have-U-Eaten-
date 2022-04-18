@@ -1,0 +1,84 @@
+{% extends 'includes/model.html' %}
+
+{% block content %}
+
+<h2>Delivery Page</h2>
+
+<br>
+
+<div class="row">
+    <div class="col-md">
+        <div class="card card-body">
+            <br>
+            <h3>Processing</h3>
+            <br>
+            <table class="table">
+                <tr>
+                    <th>buyer</th>
+                    <th>sender</th>
+                    <th>coin_reward</th>
+                    <th>take_addr</th>
+                    <th>send_addr</th>
+                    <th>status</th>
+                    <th>operation</th>
+                </tr>
+
+                {% for delivery in delivery1 %}
+                <tr>
+                    <td>{{delivery.buyer.client.nick_name}}</td>
+                    <td>{{delivery.sender.client.nick_name}}</td>
+                    <td>{{delivery.coin_reward}}</td>
+                    <td>{{delivery.take_addr}}</td>
+                    <td>{{delivery.send_addr}}</td>
+                    <td>{{delivery.status}}</td>
+                    <td>
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            {% if delivery.is_arrived %}
+                            <h4 class="btn btn-sm disabled">Picked</h4>
+                            <h4 class="btn btn-sm disabled">Arrived</h4>
+                            {% elif delivery.is_picked%}
+                            <h4 class="btn btn-sm disabled">Picked</h4>
+                            <button type="submit" name="Submit" value=done@{{delivery.id}}
+                                class="btn btn-sm btn-success">Arrived</button>
+                            {% else %}
+                            <button type="submit" name="Submit" value=got@{{delivery.id}}
+                                class="btn btn-sm btn-primary">Picked</button>
+                            <button type="submit" name="Submit" value=done@{{delivery.id}}
+                                class="btn btn-sm btn-success">Arrived</button>
+                            {% endif %}
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            <br>
+            <h3>History</h3>
+            <br>
+            <table class="table">
+                <tr>
+                    <th>buyer</th>
+                    <th>sender</th>
+                    <th>coin_reward</th>
+                    <th>take_addr</th>
+                    <th>send_addr</th>
+                    <th></th>
+                </tr>
+
+                {% for delivery in delivery2 %}
+                <tr>
+                    <td>{{delivery.buyer.client.nick_name}}</td>
+                    <td>{{delivery.sender.client.nick_name}}</td>
+                    <td>{{delivery.coin_reward}}</td>
+                    <td>{{delivery.take_addr}}</td>
+                    <td>{{delivery.send_addr}}</td>
+                    <td>{{delivery.status}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
