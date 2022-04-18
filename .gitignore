@@ -1,11 +1,5 @@
-/venv/
-/pay/
-/CRM13/
-/CRM14/
-/CRM15/
-/MultiUser/
-/DSchool/
-/static/
+/*/
+!/backend/
 /backend/accounts/migrations
 
 *.zip

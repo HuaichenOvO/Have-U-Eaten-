@@ -11,14 +11,6 @@ from django.contrib.auth.models import User
 6. 通知| Notice     | 收信者、标题、内容、已读
 """
 
-"""
-Need to rewrite the User form
-"""
-
-# class User(User):
-
-#     def __str__(self):
-#         return self.username
 
 class Token(models.Model):
     uname = models.CharField(max_length=100)
@@ -87,7 +79,11 @@ class Order(models.Model):
         else: return False
 
     def is_picked(self) -> bool:
-        if (self.status == "Sending"): return  True
+        if (self.status == "Sending" or self.status=="Claiming"): return  True
+        else: return False
+
+    def is_arrived(self) -> bool:
+        if (self.status=="Claiming"): return  True
         else: return False
 
 
@@ -97,8 +93,9 @@ class Task(models.Model):
     take_addr = models.ForeignKey(Address, related_name="tobe_start_addr",  null=True,on_delete=models.SET_NULL)
     send_addr = models.ForeignKey(Address, related_name="tobe_target_addr", null=True, on_delete=models.SET_NULL)
     exp_min = models.IntegerField(default=30)
-    note = models.TextField(max_length=4000, blank=True, default="None")
+    note = models.TextField(max_length=4000, null=True, blank=True, default="None")
     food_info = models.ImageField(null=True, blank=True)
+    post_time = models.DateTimeField(auto_created=True, auto_now_add=True)
 
     def __str__(self):
         return self.buyer.client.nick_name + "'s post- " + str(self.id)

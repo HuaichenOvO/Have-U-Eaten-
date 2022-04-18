@@ -15,7 +15,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
-from tkinter import E
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,7 +29,7 @@ SECRET_KEY = 'django-insecure-m6^5uuv-sx1v103_^x^-bld8r4cquc1mx)bauefc$c-09jr7n4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['csc4001.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
@@ -42,12 +41,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'storages',
     'accounts',
     ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -91,6 +91,17 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'demo_1',
+#         'USER': 'Ricky',
+#         'PASSWORD': '12345678',
+#         'HOST': 'database-1.crxfljereyva.ap-east-1.rds.amazonaws.com',
+#         'PORT': '5432'
+#     }
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -126,11 +137,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
+# new
+
 STATIC_URL = 'static/'
 
 STATICFILES_DIR = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = '/img/'
 
@@ -142,10 +157,20 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/img')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# --------------- Email Settings---------------
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = '119010176lin@gmail.com'
-EMAIL_HOST_PASSWORD = 'Waxx2333.'
+EMAIL_USE_TLS = False
+EMAIL_HOST = 'smtp.qq.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = '1007591290@qq.com'
+EMAIL_HOST_PASSWORD = 'ciuwoerrvbjrbcge'
 DEFAULT_FROM_EMAIL = 'default from email'
+
+
+# --------------- Server Settings---------------
+AWS_ACCESS_KEY_ID = 'AKIATRX2EOI4DAHSMWM7'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'csc4001'
+AWS_DEFAULT_ACL = None
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

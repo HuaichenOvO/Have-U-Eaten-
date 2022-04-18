@@ -22,5 +22,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls, name="Admin"),
+    path('alipay/', include('alipay.urls')),
     path('', include('accounts.urls')) # ''里千万不能加斜杠！！！不然会炸裂
 ]
