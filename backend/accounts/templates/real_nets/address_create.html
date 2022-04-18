@@ -1,0 +1,40 @@
+{% extends 'includes/model.html' %}
+
+{% block content %}
+
+<h2>Address Create Page</h2>
+
+<br>
+
+<div class="row">
+    <div class="col-md">
+        <div class="card card-body">
+            <form action="" method="post">
+
+                <table class="table">
+                    {% csrf_token %}
+                    <tr>
+                        <th>Area</th>
+                        <th>{{form.area}}</th>
+                    </tr>
+                    <tr>
+                        <th>Building</th>
+                        <th>{{form.building}}</th>
+                    </tr>
+                    <tr>
+                        <th>Room_number</th>
+                        <th>{{form.number}}</th>
+                    </tr>
+                    </tr>
+                </table>
+
+                <!-- <button name="Submit" value="create_task">create task</button> -->
+                <input class="btn btn-primary" type="submit" name="Submit" value="create_address">
+            </form>
+            <tr>{{form.errors}}</tr>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

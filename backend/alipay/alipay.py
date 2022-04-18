@@ -73,7 +73,7 @@ class AliPay(object):
  
     def sign_data(self, data):
         data.pop("sign", None)
-        # 排序后的字符串
+        # Sorted string
         unsigned_items = self.ordered_data(data)
         unsigned_string = "&".join("{0}={1}".format(k, v) for k, v in unsigned_items)
         sign = self.sign(unsigned_string.encode("utf-8"))
@@ -81,7 +81,7 @@ class AliPay(object):
         quoted_string = "&".join("{0}={1}".format(k, quote_plus(v)) for k, v in unsigned_items)
  
  
-        # 获得最终的订单信息字符串
+        # Gets the final order information string
         signed_string = quoted_string + "&sign=" + quote_plus(sign)
         return signed_string
  
@@ -93,7 +93,7 @@ class AliPay(object):
                 complex_keys.append(key)
  
  
-        # 将字典类型的数据dump出来
+        # Dump dict-type data
         for key in complex_keys:
             data[key] = json.dumps(data[key], separators=(',', ':'))
  
@@ -102,17 +102,17 @@ class AliPay(object):
  
  
     def sign(self, unsigned_string):
-        # 开始计算签名
+        # start calculating signatures
         key = self.app_private_key
         signer = PKCS1_v1_5.new(key)
         signature = signer.sign(SHA256.new(unsigned_string))
-        # base64 编码，转换为unicode表示并移除回车
+        # Base64 encoding, converts to Unicode representation and removes carriage returns
         sign = encodebytes(signature).decode("utf8").replace("\n", "")
         return sign
  
  
     def _verify(self, raw_content, signature):
-        # 开始计算签名
+        # Sstart calculating signatures
         key = self.alipay_public_key
         signer = PKCS1_v1_5.new(key)
         digest = SHA256.new()
@@ -125,7 +125,7 @@ class AliPay(object):
     def verify(self, data, signature):
         if "sign_type" in data:
             sign_type = data.pop("sign_type")
-        # 排序后的字符串
+        # sorted strings
         unsigned_items = self.ordered_data(data)
         message = "&".join(u"{}={}".format(k, v) for k, v in unsigned_items)
         return self._verify(message, signature)

@@ -1,0 +1,29 @@
+{% extends 'includes/model.html' %}
+
+{% block content %}
+
+
+<div class="row">
+    <div class="col-md">
+        <div class="card card-body">
+            <h2>Bitten Coin Center</h2>
+
+            <table class="table">
+                <thead>商品目录</thead>
+                <tr>
+                    <td>商品名</td>
+                    <td>商品单价</td>
+                    <td>商品数量</td>
+                    <td>是否购买</td>
+                </tr>
+                <tr>
+                    <td>Bittencoin</td>
+                    <td>0.1</td>
+                    <td>1</td>
+                    <td><a href="{% url 'bill' %}">购买</a></td>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

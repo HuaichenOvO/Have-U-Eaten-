@@ -1,0 +1,115 @@
+{% extends 'includes/model.html' %}
+
+{% block content %}
+
+<h2>Order Page</h2>
+
+
+<br>
+
+<div class="row">
+    <div class="col-md">
+        <div class="card card-body">
+            <br>
+            <h3>Processing</h3>
+            <br>
+            <table class="table">
+                <tr>
+                    <th>buyer</th>
+                    <th>sender</th>
+                    <th>coin_reward</th>
+                    <th>take_addr</th>
+                    <th>send_addr</th>
+                    <th>status</th>
+                    <th>operation</th>
+                </tr>
+
+
+                {% for order in order1 %}
+                <tr>
+                    <td>{{order.buyer.client.nick_name}}</td>
+                    <td>{{order.sender.client.nick_name}}</td>
+                    <td>{{order.coin_reward}}</td>
+                    <td>{{order.take_addr}}</td>
+                    <td>{{order.send_addr}}</td>
+                    <td>{{order.status}}</td>
+                    <td>
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <button type="submit" name="Submit" value=Received@{{order.id}}
+                                class="btn btn-sm btn-success">Received</button>
+                            {% if order.can_cancel %}
+                            <button type="submit" name="Submit" value=Cancel@{{order.id}}
+                                class="btn btn-sm btn-warning">Cancel</button>
+                            {% else %}
+                            <h4 class="btn btn-sm disabled">Cancel</h4>
+                            {% endif %}
+                        </form>
+
+                    </td>
+                </tr>
+                {% endfor %}
+                {% if not order1.count %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        No history
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                {% endif %}
+            </table>
+            <br>
+            <h3>History</h3>
+            <br>
+            <table class="table">
+                <tr>
+                    <th>buyer</th>
+                    <th>sender</th>
+                    <th>coin_reward</th>
+                    <th>take_addr</th>
+                    <th>send_addr</th>
+                    <th>status</th>
+                    <th></th>
+                </tr>
+                {% for order in order2 %}
+                <tr>
+                    <td>{{order.buyer.client.nick_name}}</td>
+                    <td>{{order.sender.client.nick_name}}</td>
+                    <td>{{order.coin_reward}}</td>
+                    <td>{{order.take_addr}}</td>
+                    <td>{{order.send_addr}}</td>
+                    <td>{{order.status}}</td>
+                </tr>
+                {% endfor %}
+
+                {% if not order2.count %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        No history
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                {% endif %}
+
+            </table>
+        </div>
+    </div>
+
+</div>
+<script>
+    {% for msg in messages %}
+    alert('{{ msg.message }}');
+    {% endfor %}
+</script>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'includes/model.html' %}
+
+{% block content %}
+
+<h2>Tasks Create Page</h2>
+
+<br>
+
+<div class="row">
+    <div class="col-md">
+        <div class="card card-body">
+            <form method="POST" action="" enctype="multipart/form-data">
+                <table class="table">
+                    {% csrf_token %}
+                    <tr>
+                        <th>coin_reward</th>
+                        <th>{{form.coin_reward}}</th>
+                    </tr>
+                    <tr>
+                        <th>take_addr</th>
+                        <th>{{form.take_addr}}</th>
+                    </tr>
+                    <tr>
+                        <th>send_addr</th>
+                        <th>{{form.send_addr}}</th>
+                    </tr>
+                    <tr>
+                        <th>exp_time</th>
+                        <th>{{form.exp_min}}</th>
+                    </tr>
+                    <tr>
+                        <th>note</th>
+                        <th>{{form.note}}</th>
+                    </tr>
+                    <tr>
+                        <th>food_info</th>
+                        <th>{{form.food_info}}</th>
+                    </tr>
+                    <!-- <button name="Submit" value="create_task">create task</button> -->
+                </table>
+                <input class="btn btn-primary" type="submit" name="Submit" value="confirm">
+            </form>
+            <script>
+                {% for msg in messages %}
+                alert('{{ msg.message }}');
+                {% endfor %}
+            </script>
+
+
+
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends 'includes/model.html' %}
+
+{% block content %}
+
+
+
+<div class="row">
+    <div class="col-md">
+        <div class="card card-body">
+            <h2>Tasks Page </h2>
+            <h3>Total public posts: {{ task_num }}</h3>
+            <table class="table">
+                <tr>
+                    <th>buyer</th>
+                    <th>coin_reward</th>
+                    <th>take_addr</th>
+                    <th>send_addr</th>
+                    <th>exp_time</th>
+                    <th>Manage</th>
+                </tr>
+
+                {% for task in other_tasks %}
+                <tr>
+                    <td>{{task.buyer.client.nick_name}}</td>
+                    <td>{{task.coin_reward}}</td>
+                    <td>{{task.take_addr}}</td>
+                    <td>{{task.send_addr}}</td>
+                    <td>{{task.exp_min}}</td>
+                    <td>
+                        <form action="" method="post" style="margin:0px;display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="Submit" value=Claim@{{task.id}}><!-- 只有它被点击 所以name冲突没关系 -->
+                            <button class="btn btn-sm btn-warning">Claim</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<br>
+<div class="row">
+    <div class="col-md">
+        <div class="card card-body">
+            <h3 id="menu" style="margin-bottom: -25">My Posts</h3>
+            <table class="table">
+                <tr>
+                    <th>buyer</th>
+                    <th>coin_reward</th>
+                    <th>take_addr</th>
+                    <th>send_addr</th>
+                    <th>exp_time</th>
+                    <th>Manage</th>
+                </tr>
+
+                {% for task in my_tasks %}
+                <tr>
+                    <td>{{task.buyer.client.nick_name}}</td>
+                    <td>{{task.coin_reward}}</td>
+                    <td>{{task.take_addr}}</td>
+                    <td>{{task.send_addr}}</td>
+                    <td>{{task.exp_min}}</td>
+                    <td>
+                        <a class="btn btn-sm btn-info" href="{% url 'Tasks_create' task.id %}">Update</a>
+                        <form action="" method="post" style="margin:0px;display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="Submit" value=Delete@{{task.id}}><!-- 只有它被点击 所以name冲突没关系 -->
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'Tasks_create' pk=0 %}">Post tasks</a>
+<script>
+    {% for msg in messages %}
+    alert('{{ msg.message }}');
+    {% endfor %}
+</script>
+{% endblock %}

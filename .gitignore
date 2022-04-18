@@ -6,9 +6,6 @@
 *.png 
 *.img 
 *.jpg
-*.html
-*.css
-*.js
 *.pyc
 *.sqlite3
 Super User Info.txt

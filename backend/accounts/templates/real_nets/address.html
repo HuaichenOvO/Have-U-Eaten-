@@ -1,0 +1,48 @@
+{% extends 'includes/model.html' %}
+
+{% block content %}
+
+<h2>Address Page</h2>
+
+<br>
+
+<div class="row">
+    <div class="col-md">
+        <div class="card card-body">
+            <table class="table">
+                <tr>
+                    <th>Area</th>
+                    <th>Building</th>
+                    <th>Number</th>
+                    <th>Manage</th>
+                </tr>
+
+                {% for adr in address %}
+                <tr>
+                    <td>{{adr.area}}</td>
+                    <td>{{adr.building}}</td>
+                    <td>{{adr.number}}</td>
+                    <td>
+                        <a class="btn btn-sm btn-info" href="{% url 'Address_create' adr.id %}">Update</a>
+                        <form action="" method="post" style="margin:0px;display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" name="Submit" value=Delete@{{adr.id}}
+                                class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    {% for msg in messages %}
+    alert('{{ msg.message }}');
+    {% endfor %}
+</script>
+<a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'Address_create' 0 %}">Create Address</a>
+
+{% endblock %}
