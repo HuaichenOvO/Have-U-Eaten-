@@ -45,7 +45,7 @@ urlpatterns = [
     path('order/', views.order, name= "Order"),
     
     path('address/', views.address, name= "Address"),
-    path('address_create/', views.address_create, name= "Address_create"),
+    path('address_create/<str:pk>', views.address_create, name= "Address_create"),
 
 ]
 

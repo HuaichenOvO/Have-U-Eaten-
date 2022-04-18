@@ -8,6 +8,7 @@
 /static/
 /backend/accounts/migrations
 
+*.zip
 *.png 
 *.img 
 *.jpg

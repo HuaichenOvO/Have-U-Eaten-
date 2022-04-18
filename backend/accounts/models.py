@@ -62,9 +62,10 @@ class Address(models.Model):
 
 class Order(models.Model):
     STATUS = (
-        ('Pending','Pending'),
+        ('Pending','Pending'), 
         ('Sending','Sending'),
-        ('Claiming','Claiming'),
+        ('Claiming','Claiming'),# arrived
+        ('Canceled','Canceled'),
         ('Done','Done'),
     )
     buyer = models.ForeignKey(User, related_name="as_buyer", null=True, on_delete=models.SET_NULL)
@@ -80,6 +81,15 @@ class Order(models.Model):
 
     def __str__(self):
         return self.buyer.client.nick_name + "'s order- " + str(self.id)
+
+    def can_cancel(self) -> bool:
+        if (self.status == "Pending"): return  True
+        else: return False
+
+    def is_picked(self) -> bool:
+        if (self.status == "Sending"): return  True
+        else: return False
+
 
 class Task(models.Model):
     buyer = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)

@@ -1,20 +1,20 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from pymysql import NULL
-from .decorators import unauthenticated_user
-from .models import *
-from .views import *
-from .forms import *
-
-from django.core.mail import send_mail
+from django.db.models import Q
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 from django.contrib.auth.models import Group
 from django.contrib import messages
+from pymysql import NULL
 import random
+from .decorators import unauthenticated_user
+from .models import *
+from .views import *
+from .forms import *
 
 
 # Create your views here.
@@ -182,7 +182,7 @@ def tasks(request):
     return render(request, 'real_nets/tasks.html', context)
 
 @login_required(login_url='Login')
-def tasks_create(request, pk=0):
+def tasks_create(request, pk):
     #调用form中的注册表并渲染进url指定的html文件中
     if pk==0 :
         form = TaskCreateForm(initial=
@@ -197,11 +197,13 @@ def tasks_create(request, pk=0):
 
     if request.method == "POST":
         if request.POST["Submit"] == "confirm": 
+            print("confirmed")
             if pk==0: 
-                form = TaskCreateForm(request.POST)
+                form = TaskCreateForm(request.POST, request.FILES)
             else: 
-                form = TaskCreateForm(request.POST, instance=task)
+                form = TaskCreateForm(request.POST, request.FILES, instance=task)
             if form.is_valid():
+                print("valid")
                 form.instance.buyer = request.user
                 form.save()
                 return redirect(tasks)
@@ -211,20 +213,54 @@ def tasks_create(request, pk=0):
 
 @login_required(login_url='Login')
 def delivery(request):
-    deliveries = Order.objects.filter(sender=request.user.id)
+    if request.method == "POST":
+        cmd_value = request.POST["Submit"]
+        cmd_name = (cmd_value.split('@'))[0]
+        cmd_id = (cmd_value.split('@'))[1]
+
+        if cmd_name == "got":
+            order = Order.objects.filter(id=cmd_id).first()
+            print("picked")
+            order.status=("Sending")
+            order.save()
+        elif cmd_name == "done":
+            order = Order.objects.filter(id=cmd_id).first()
+            print("arrived")
+            order.status=("Claiming")
+            order.save()
 
     # deliveries = Order.objects.filter(buyer.id==request.user.id)
+    deliveries1 = Order.objects.filter(Q(sender=request.user.id) & Q(status="Pending") | Q(status="Sending") | Q(status="Claiming"))
+    deliveries2 = Order.objects.filter(Q(sender=request.user.id) & Q(status="Canceled") | Q(status="Done"))
 
-    context = {"deliveries": deliveries}    
+    context = {"delivery1": deliveries1, "delivery2": deliveries2}    
     return render(request, 'real_nets/delivery.html', context)
 
 @login_required(login_url='Login')
 def order(request):
-    orders = Order.objects.filter(buyer=request.user.id)
+    if request.method == "POST":
+        try:
+            cmd_value = request.POST["Submit"]
+            cmd_name = (cmd_value.split('@'))[0]
+            cmd_id = (cmd_value.split('@'))[1]
 
-    # orders = Order.objects.all()
+            if cmd_name == "Cancel":
+                order = Order.objects.filter(id=cmd_id).first()
+                print("cancel")
+                order.status=("Canceled")
+                order.save()
+            elif cmd_name == "Received":
+                order = Order.objects.filter(id=cmd_id).first()
+                print("done")
+                order.status=("Done")
+                order.save()
+        except Exception as ex:
+            pass
+
+    orders1 = Order.objects.filter(Q(buyer=request.user.id) & Q(status="Pending") | Q(status="Sending") | Q(status="Claiming"))
+    orders2 = Order.objects.filter(Q(buyer=request.user.id) & Q(status="Canceled") | Q(status="Done"))
     
-    context = {"orders": orders}    
+    context = {"order1": orders1, "order2": orders2}    
     return render(request, 'real_nets/order.html', context)
 
 @login_required(login_url='Login')
@@ -236,13 +272,25 @@ def address(request):
     return render(request, 'real_nets/address.html', context)
 
 @login_required(login_url='Login')
-def address_create(request):
+def address_create(request, pk):
+    #调用form中的注册表并渲染进url指定的html文件中
+    if int(pk)==0 :
+        form = AddressCreateForm() 
+        # create
+    else:
+        addr = Address.objects.filter(id=int(pk)).first()
+        form = AddressCreateForm(instance=addr) 
+        print (form)
+        # update  # filter().first()防止报错
+    
     #调用form中的注册表并渲染进url指定的html文件中
     form = AddressCreateForm() 
     if request.method == "POST":
-        # 根据 <input name=Submit value=xxx>的value值来确定是哪一个input按钮
         if request.POST["Submit"] == "create_address": 
-            form = AddressCreateForm(request.POST)
+            if pk==0: 
+                form = AddressCreateForm(request.POST)
+            else: 
+                form = AddressCreateForm(request.POST, instance=addr)
             if form.is_valid():
                 form.instance.owner = request.user
                 form.save()
